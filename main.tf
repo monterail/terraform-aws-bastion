@@ -29,14 +29,14 @@ resource "aws_security_group" "bastion_host_security_group" {
 }
 
 resource "aws_security_group_rule" "ingress_bastion" {
-  count            = var.bastion_security_group_id == "" && var.create_elb ? 1 : 0
+  count            = var.bastion_security_group_id == ""|| var.create_elb ? 1 : 0
   description      = "Incoming traffic to bastion"
   type             = "ingress"
   from_port        = var.public_ssh_port
   to_port          = var.public_ssh_port
   protocol         = "TCP"
-  cidr_blocks      = local.ipv4_cidr_block
-  ipv6_cidr_blocks = local.ipv6_cidr_block
+  cidr_blocks      = var.cidrs
+  ipv6_cidr_blocks = var.ipv6_cidrs
 
   security_group_id = local.security_group
 }
